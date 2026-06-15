@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RobloxErrores.fandom — Base de Conocimiento</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:         #0f0f1a;
+      --surface:    #181828;
+      --card:       #1e1e32;
+      --border:     #2e2e4a;
+      --red:        #e53935;
+      --red-glow:   rgba(229,57,53,0.25);
+      --orange:     #ff6d00;
+      --yellow:     #ffd600;
+      --green:      #00e676;
+      --blue:       #448aff;
+      --text:       #e8e8f0;
+      --muted:      #8888aa;
+      --tag-bg:     #252540;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* ─── TOP BAR ─── */
+    .topbar {
+      background: var(--surface);
+      border-bottom: 2px solid var(--red);
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      height: 60px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 20px var(--red-glow);
+    }
+    .logo {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.5rem;
+      color: var(--red);
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+    .logo span { color: var(--yellow); }
+    .topbar-links {
+      display: flex;
+      gap: 1.2rem;
+      list-style: none;
+      margin-left: auto;
+    }
+    .topbar-links a {
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: .5px;
+      transition: color .2s;
+    }
+    .topbar-links a:hover { color: var(--text); }
+
+    /* ─── HERO ─── */
+    .hero {
+      background: linear-gradient(135deg, #1a0a0a 0%, #0f0f1a 60%);
+      border-bottom: 1px solid var(--border);
+      padding: 3.5rem 2rem 2.5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "⚠";
+      position: absolute;
+      font-size: 18rem;
+      opacity: .03;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .hero h1 {
+      font-family: 'Fredoka One', cursive;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      color: var(--red);
+      text-shadow: 0 0 30px var(--red-glow);
+      margin-bottom: .5rem;
+    }
+    .hero p {
+      color: var(--muted);
+      font-size: .95rem;
+      max-width: 520px;
+      margin: 0 auto 1.5rem;
+    }
+    .search-bar {
+      display: flex;
+      max-width: 480px;
+      margin: 0 auto;
+      gap: .5rem;
+    }
+    .search-bar input {
+      flex: 1;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: .65rem 1rem;
+      color: var(--text);
+      font-size: .9rem;
+      outline: none;
+      transition: border-color .2s;
+    }
+    .search-bar input:focus { border-color: var(--red); }
+    .search-bar input::placeholder { color: var(--muted); }
+    .btn {
+      background: var(--red);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: .65rem 1.2rem;
+      font-weight: 700;
+      font-size: .85rem;
+      cursor: pointer;
+      transition: background .2s, transform .1s;
+    }
+    .btn:hover { background: #c62828; transform: translateY(-1px); }
+
+    /* ─── STATS BAR ─── */
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      padding: 1rem 2rem;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .stat { text-align: center; }
+    .stat .num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--yellow);
+    }
+    .stat .lbl { font-size: .72rem; color: var(--muted); letter-spacing: .5px; text-transform: uppercase; }
+
+    /* ─── LAYOUT ─── */
+    .layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      max-width: 1100px;
+      margin: 0 auto;
+      gap: 1.5rem;
+      padding: 2rem 1rem;
+    }
+    @media (max-width: 700px) {
+      .layout { grid-template-columns: 1fr; }
+      .sidebar { display: none; }
+    }
+
+    /* ─── SIDEBAR ─── */
+    .sidebar { display: flex; flex-direction: column; gap: 1rem; }
+    .sidebar-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+    }
+    .sidebar-box h3 {
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-bottom: .75rem;
+    }
+    .cat-item {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      padding: .4rem .5rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background .15s;
+      font-size: .88rem;
+    }
+    .cat-item:hover { background: var(--tag-bg); }
+    .cat-item .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .cat-item .cnt {
+      margin-left: auto;
+      font-size: .75rem;
+      color: var(--muted);
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .tag-cloud { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .tag {
+      background: var(--tag-bg);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: .2rem .55rem;
+      font-size: .72rem;
+      color: var(--muted);
+      cursor: pointer;
+      transition: border-color .15s, color .15s;
+    }
+    .tag:hover { border-color: var(--red); color: var(--text); }
+
+    /* ─── MAIN ─── */
+    .main { display: flex; flex-direction: column; gap: 1rem; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: .25rem;
+    }
+    .section-header h2 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.15rem;
+      color: var(--text);
+    }
+    .sort-btns { display: flex; gap: .4rem; }
+    .sort-btn {
+      background: var(--tag-bg);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 6px;
+      padding: .25rem .7rem;
+      font-size: .75rem;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .sort-btn.active, .sort-btn:hover {
+      border-color: var(--red);
+      color: var(--text);
+    }
+
+    /* ─── ERROR CARD ─── */
+    .error-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.1rem 1.3rem;
+      display: flex;
+      gap: 1rem;
+      transition: border-color .2s, transform .15s;
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+    .error-card:hover {
+      border-color: var(--red);
+      transform: translateY(-2px);
+    }
+    .error-card.pinned { border-color: var(--yellow); }
+    .votes {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .15rem;
+      min-width: 40px;
+    }
+    .vote-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--green);
+    }
+    .vote-arrow { color: var(--muted); font-size: .9rem; cursor: pointer; }
+    .vote-arrow:hover { color: var(--green); }
+    .card-body { flex: 1; min-width: 0; }
+    .card-title {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: .3rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      flex-wrap: wrap;
+    }
+    .badge {
+      font-size: .65rem;
+      font-weight: 700;
+      letter-spacing: .5px;
+      padding: .15rem .45rem;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+    .badge-red    { background: rgba(229,57,53,.2); color: var(--red); border: 1px solid var(--red); }
+    .badge-orange { background: rgba(255,109,0,.15); color: var(--orange); border: 1px solid var(--orange); }
+    .badge-yellow { background: rgba(255,214,0,.12); color: var(--yellow); border: 1px solid var(--yellow); }
+    .badge-green  { background: rgba(0,230,118,.12); color: var(--green); border: 1px solid var(--green); }
+    .badge-blue   { background: rgba(68,138,255,.15); color: var(--blue); border: 1px solid var(--blue); }
+    .badge-pin    { background: rgba(255,214,0,.12); color: var(--yellow); border: 1px solid var(--yellow); }
+
+    .error-code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .78rem;
+      color: var(--red);
+      background: rgba(229,57,53,.08);
+      border: 1px solid rgba(229,57,53,.2);
+      border-radius: 4px;
+      padding: .1rem .4rem;
+    }
+    .card-desc {
+      color: var(--muted);
+      font-size: .85rem;
+      margin-bottom: .55rem;
+      line-height: 1.5;
+    }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: .8rem;
+      flex-wrap: wrap;
+      font-size: .75rem;
+      color: var(--muted);
+    }
+    .card-meta .tag { padding: .1rem .45rem; }
+    .card-meta .user { color: var(--blue); }
+    .card-meta .replies { color: var(--muted); }
+
+    /* ─── SOLUTION BOX ─── */
+    .solution-preview {
+      background: rgba(0,230,118,.05);
+      border: 1px solid rgba(0,230,118,.2);
+      border-radius: 8px;
+      padding: .55rem .8rem;
+      font-size: .8rem;
+      color: var(--green);
+      margin-top: .5rem;
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+    }
+
+    /* ─── PINNED NOTICE ─── */
+    .pinned-label {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      font-size: .72rem;
+      color: var(--yellow);
+      margin-bottom: .4rem;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+      font-size: .78rem;
+      border-top: 1px solid var(--border);
+      margin-top: 2rem;
+    }
+    footer a { color: var(--red); text-decoration: none; }
+
+    /* ─── MODAL ─── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.75);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      max-width: 640px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 1.8rem;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+    .modal-close {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 1.4rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+    .modal-close:hover { color: var(--text); }
+    .modal h2 { font-family: 'Fredoka One', cursive; font-size: 1.4rem; }
+    .modal-section { margin-bottom: 1.2rem; }
+    .modal-section h4 {
+      font-size: .75rem;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: var(--muted);
+      margin-bottom: .5rem;
+    }
+    .modal-section p { font-size: .88rem; line-height: 1.65; color: #cccce0; }
+    .step-list { list-style: none; counter-reset: steps; }
+    .step-list li {
+      counter-increment: steps;
+      display: flex;
+      gap: .8rem;
+      align-items: flex-start;
+      margin-bottom: .6rem;
+      font-size: .88rem;
+      color: #cccce0;
+      line-height: 1.6;
+    }
+    .step-list li::before {
+      content: counter(steps);
+      background: var(--red);
+      color: #fff;
+      font-weight: 700;
+      font-size: .72rem;
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .code-block {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: .8rem 1rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .8rem;
+      color: var(--green);
+      overflow-x: auto;
+      margin-top: .4rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<nav class="topbar">
+  <div class="logo">Roblox<span>Errores</span>.fandom</div>
+  <ul class="topbar-links">
+    <li><a href="#">Inicio</a></li>
+    <li><a href="#">Wiki</a></li>
+    <li><a href="#">Reportar Error</a></li>
+    <li><a href="#">Comunidad</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <h1>⚠ Base de Errores de Roblox</h1>
+  <p>Encuentra soluciones para los errores más comunes de Roblox, reportados y verificados por la comunidad.</p>
+  <div class="search-bar">
+    <input type="text" placeholder="Buscar error… ej: Error 17, conexión, crash…" />
+    <button class="btn">Buscar</button>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat"><div class="num">247</div><div class="lbl">Errores documentados</div></div>
+  <div class="stat"><div class="num">1.4k</div><div class="lbl">Soluciones verificadas</div></div>
+  <div class="stat"><div class="num">89%</div><div class="lbl">Tasa de resolución</div></div>
+  <div class="stat"><div class="num">12.3k</div><div class="lbl">Miembros activos</div></div>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-box">
+      <h3>Categorías</h3>
+      <div class="cat-item" onclick="filterCards('conexion')">
+        <span class="dot" style="background:#448aff"></span> Conexión / Red
+        <span class="cnt">68</span>
+      </div>
+      <div class="cat-item" onclick="filterCards('crash')">
+        <span class="dot" style="background:#e53935"></span> Cierres / Crash
+        <span class="cnt">41</span>
+      </div>
+      <div class="cat-item" onclick="filterCards('login')">
+        <span class="dot" style="background:#ffd600"></span> Login / Cuenta
+        <span class="cnt">35</span>
+      </div>
+      <div class="cat-item" onclick="filterCards('graficos')">
+        <span class="dot" style="background:#00e676"></span> Gráficos / Pantalla
+        <span class="cnt">29</span>
+      </div>
+      <div class="cat-item" onclick="filterCards('audio')">
+        <span class="dot" style="background:#ff6d00"></span> Audio / Sonido
+        <span class="cnt">18</span>
+      </div>
+      <div class="cat-item" onclick="filterCards('studio')">
+        <span class="dot" style="background:#aa00ff"></span> Roblox Studio
+        <span class="cnt">56</span>
+      </div>
+      <div class="cat-item" onclick="filterCards('')">
+        <span class="dot" style="background:#888"></span> Todos
+        <span class="cnt">247</span>
+      </div>
+    </div>
+
+    <div class="sidebar-box">
+      <h3>Tags populares</h3>
+      <div class="tag-cloud">
+        <span class="tag">Error 17</span>
+        <span class="tag">Error 279</span>
+        <span class="tag">Error 6</span>
+        <span class="tag">Windows</span>
+        <span class="tag">Mac</span>
+        <span class="tag">Móvil</span>
+        <span class="tag">Firewall</span>
+        <span class="tag">Antivirus</span>
+        <span class="tag">DNS</span>
+        <span class="tag">Lag</span>
+        <span class="tag">FPS</span>
+        <span class="tag">Studio</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="section-header">
+      <h2>Errores Reportados</h2>
+      <div class="sort-btns">
+        <button class="sort-btn active">Recientes</button>
+        <button class="sort-btn">Populares</button>
+        <button class="sort-btn">Sin resolver</button>
+      </div>
+    </div>
+
+    <!-- CARD 1 — Pinned -->
+    <a class="error-card pinned" onclick="openModal('e279'); return false;" href="#">
+      <div class="votes">
+        <span class="vote-arrow">▲</span>
+        <span class="vote-num">312</span>
+        <span class="vote-arrow">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="pinned-label">📌 Fijado por moderador</div>
+        <div class="card-title">
+          <span class="badge badge-pin">📌 DESTACADO</span>
+          <span class="badge badge-red">CRÍTICO</span>
+          No puedo conectarme a ningún juego
+          <span class="error-code">Error 279</span>
+        </div>
+        <p class="card-desc">El juego se carga pero al 100% aparece "Error Code: 279 — Failed to connect to the Game. (ID=17 Ping Timeout)". Afecta a todos los servidores.</p>
+        <div class="solution-preview">✅ Solución verificada — Revisa tu firewall y permite Roblox en el puerto UDP 49152–65535</div>
+        <div class="card-meta">
+          <span class="tag">conexion</span><span class="tag">red</span><span class="tag">firewall</span>
+          <span class="user">@RobloxHelper</span>
+          <span class="replies">💬 148 respuestas</span>
+          <span>hace 2 días</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- CARD 2 -->
+    <a class="error-card" onclick="openModal('e17'); return false;" href="#">
+      <div class="votes">
+        <span class="vote-arrow">▲</span>
+        <span class="vote-num">207</span>
+        <span class="vote-arrow">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="card-title">
+          <span class="badge badge-red">ERROR</span>
+          Roblox se cierra solo al iniciar un juego
+          <span class="error-code">Error 17</span>
+        </div>
+        <p class="card-desc">La aplicación de escritorio lanza el juego, la pantalla de carga aparece y luego se cierra sin mensaje. Ocurre especialmente en Windows 11.</p>
+        <div class="solution-preview">✅ Solución verificada — Reinstalar el launcher y borrar caché de %LocalAppData%\Roblox</div>
+        <div class="card-meta">
+          <span class="tag">crash</span><span class="tag">windows</span>
+          <span class="user">@ProGamer_CR</span>
+          <span class="replies">💬 93 respuestas</span>
+          <span>hace 4 días</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- CARD 3 -->
+    <a class="error-card" onclick="openModal('e6'); return false;" href="#">
+      <div class="votes">
+        <span class="vote-arrow">▲</span>
+        <span class="vote-num">180</span>
+        <span class="vote-arrow">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="card-title">
+          <span class="badge badge-orange">ERROR</span>
+          No puedo iniciar sesión — cuenta bloqueada
+          <span class="error-code">Error 6</span>
+        </div>
+        <p class="card-desc">"This account has been disabled." aparece al intentar ingresar. Puede ser baneo, verificación pendiente o error temporal del servidor.</p>
+        <div class="card-meta">
+          <span class="tag">login</span><span class="tag">cuenta</span><span class="tag">baneo</span>
+          <span class="user">@NinjaCoder</span>
+          <span class="replies">💬 67 respuestas</span>
+          <span>hace 5 días</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- CARD 4 -->
+    <a class="error-card" onclick="openModal('lag'); return false;" href="#">
+      <div class="votes">
+        <span class="vote-arrow">▲</span>
+        <span class="vote-num">155</span>
+        <span class="vote-arrow">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="card-title">
+          <span class="badge badge-yellow">RENDIMIENTO</span>
+          FPS muy bajo / lag terrible en juegos
+        </div>
+        <p class="card-desc">Los juegos que antes corrían a 60 FPS ahora van a 10–20 FPS con mucho stuttering. Ocurre en PC y móvil por igual.</p>
+        <div class="solution-preview">✅ Solución verificada — Reduce calidad gráfica en ajustes del juego y actualiza drivers de GPU</div>
+        <div class="card-meta">
+          <span class="tag">graficos</span><span class="tag">fps</span><span class="tag">lag</span>
+          <span class="user">@SpeedRunner_MX</span>
+          <span class="replies">💬 54 respuestas</span>
+          <span>hace 1 semana</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- CARD 5 -->
+    <a class="error-card" onclick="openModal('studio'); return false;" href="#">
+      <div class="votes">
+        <span class="vote-arrow">▲</span>
+        <span class="vote-num">98</span>
+        <span class="vote-arrow">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="card-title">
+          <span class="badge badge-blue">STUDIO</span>
+          Roblox Studio no carga los plugins
+        </div>
+        <p class="card-desc">Al abrir Studio, los plugins instalados aparecen en la lista pero no se ejecutan ni muestran interfaz. El botón de activar no responde.</p>
+        <div class="card-meta">
+          <span class="tag">studio</span><span class="tag">plugins</span>
+          <span class="user">@DevMaster99</span>
+          <span class="replies">💬 31 respuestas</span>
+          <span>hace 1 semana</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- CARD 6 -->
+    <a class="error-card" onclick="openModal('audio'); return false;" href="#">
+      <div class="votes">
+        <span class="vote-arrow">▲</span>
+        <span class="vote-num">76</span>
+        <span class="vote-arrow">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="card-title">
+          <span class="badge badge-orange">AUDIO</span>
+          Sin sonido en todos los juegos de Roblox
+        </div>
+        <p class="card-desc">El audio del sistema funciona, pero dentro de Roblox no se escucha música, efectos de sonido ni voz de jugadores. Solo silencio total.</p>
+        <div class="solution-preview">✅ Solución verificada — Verifica el mezclador de volumen de Windows y reinicia el servicio de audio</div>
+        <div class="card-meta">
+          <span class="tag">audio</span><span class="tag">windows</span><span class="tag">mac</span>
+          <span class="user">@SoundFixer_BO</span>
+          <span class="replies">💬 22 respuestas</span>
+          <span>hace 2 semanas</span>
+        </div>
+      </div>
+    </a>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  RobloxErrores.fandom — Comunidad no oficial • No afiliada a Roblox Corporation •
+  <a href="#">Reportar contenido</a> · <a href="#">Reglas del foro</a> · <a href="#">Discord</a>
+</footer>
+
+<!-- ─── MODALES DE DETALLE ─── -->
+
+<!-- Modal Error 279 -->
+<div class="modal-overlay" id="modal-e279">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>⚠ Error Code 279 — Ping Timeout</h2>
+      <button class="modal-close" onclick="closeModal('e279')">✕</button>
+    </div>
+    <div class="modal-section">
+      <h4>¿Qué significa?</h4>
+      <p>Roblox no pudo establecer una conexión estable con el servidor del juego. El cliente envió paquetes pero no recibió respuesta a tiempo. Generalmente es un problema de red local, firewall o antivirus.</p>
+    </div>
+    <div class="modal-section">
+      <h4>Solución paso a paso</h4>
+      <ol class="step-list">
+        <li>Abre el <strong>Panel de Control</strong> → Firewall de Windows Defender → Permite una aplicación a través del firewall.</li>
+        <li>Busca <strong>Roblox</strong> en la lista y marca ambas casillas (privada y pública). Si no aparece, agrégala manualmente.</li>
+        <li>Abre los puertos <strong>UDP 49152–65535</strong> en tu router (port forwarding hacia tu PC).</li>
+        <li>Desactiva temporalmente el antivirus y prueba. Si funciona, añade Roblox a las excepciones.</li>
+        <li>Cambia el DNS a <strong>8.8.8.8 / 8.8.4.4</strong> (Google DNS) en tu adaptador de red.</li>
+        <li>Si usas VPN, desactívala durante el juego.</li>
+      </ol>
+    </div>
+    <div class="modal-section">
+      <h4>Comando útil (CMD como administrador)</h4>
+      <div class="code-block">ipconfig /flushdns<br>netsh winsock reset<br>netsh int ip reset</div>
+    </div>
+    <div class="solution-preview">✅ Esta solución resolvió el problema al 91% de los usuarios que la reportaron.</div>
+  </div>
+</div>
+
+<!-- Modal Error 17 -->
+<div class="modal-overlay" id="modal-e17">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>⚠ Error Code 17 — Crash al iniciar</h2>
+      <button class="modal-close" onclick="closeModal('e17')">✕</button>
+    </div>
+    <div class="modal-section">
+      <h4>¿Qué significa?</h4>
+      <p>El launcher de Roblox se cierra inesperadamente al intentar cargar el motor del juego. Puede deberse a archivos de instalación corruptos, caché dañada o conflictos con software de seguridad.</p>
+    </div>
+    <div class="modal-section">
+      <h4>Solución paso a paso</h4>
+      <ol class="step-list">
+        <li>Cierra Roblox completamente (verifica el Administrador de Tareas).</li>
+        <li>Navega a <strong>%LocalAppData%\Roblox</strong> y borra la carpeta <strong>logs</strong> y <strong>versions</strong>.</li>
+        <li>Desinstala Roblox desde Programas y Características.</li>
+        <li>Descarga el instalador oficial desde <strong>roblox.com</strong> e instala de nuevo.</li>
+        <li>Ejecuta Roblox como Administrador la primera vez.</li>
+        <li>Si el error persiste, actualiza tus drivers de DirectX y Visual C++ Redistributable.</li>
+      </ol>
+    </div>
+    <div class="modal-section">
+      <h4>Ruta de caché a limpiar</h4>
+      <div class="code-block">%LocalAppData%\Roblox\logs<br>%LocalAppData%\Roblox\versions<br>%Temp%\Roblox</div>
+    </div>
+    <div class="solution-preview">✅ Esta solución resolvió el problema al 87% de los usuarios.</div>
+  </div>
+</div>
+
+<!-- Modal Error 6 -->
+<div class="modal-overlay" id="modal-e6">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>⚠ Error Code 6 — Cuenta deshabilitada</h2>
+      <button class="modal-close" onclick="closeModal('e6')">✕</button>
+    </div>
+    <div class="modal-section">
+      <h4>¿Qué significa?</h4>
+      <p>Tu cuenta fue temporalmente o permanentemente suspendida por Roblox. Puede deberse a violaciones de las Normas de la Comunidad, actividad sospechosa o error del sistema.</p>
+    </div>
+    <div class="modal-section">
+      <h4>¿Qué hacer?</h4>
+      <ol class="step-list">
+        <li>Revisa el correo registrado — Roblox envía un email explicando el motivo del baneo.</li>
+        <li>Si crees que es un error, ve a <strong>roblox.com/support</strong> y envía una apelación.</li>
+        <li>Proporciona tu nombre de usuario, correo y detalles de la cuenta para verificar identidad.</li>
+        <li>Si es un baneo temporal, espera el tiempo indicado. Los baneos de 1–7 días expiran automáticamente.</li>
+        <li>Si tu cuenta fue hackeada, reporta de inmediato en el formulario de soporte.</li>
+      </ol>
+    </div>
+    <div class="solution-preview">⚠ Si es un baneo permanente, la apelación es el único camino. Actúa rápido.</div>
+  </div>
+</div>
+
+<!-- Modal Lag -->
+<div class="modal-overlay" id="modal-lag">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>⚠ FPS bajo / Lag en juegos</h2>
+      <button class="modal-close" onclick="closeModal('lag')">✕</button>
+    </div>
+    <div class="modal-section">
+      <h4>¿Qué causa el lag en Roblox?</h4>
+      <p>Puede ser lag de red (ping alto), lag de rendimiento (GPU/CPU insuficiente) o lag del servidor del juego. Identifica cuál es el tuyo con el panel de diagnóstico (Shift+F2 dentro del juego).</p>
+    </div>
+    <div class="modal-section">
+      <h4>Soluciones para bajo FPS</h4>
+      <ol class="step-list">
+        <li>Dentro del juego ve a <strong>Menú → Configuración → Gráficos</strong> y reduce al nivel 1 o 2.</li>
+        <li>Actualiza los drivers de tu tarjeta gráfica (NVIDIA / AMD / Intel).</li>
+        <li>Cierra aplicaciones en segundo plano (Chrome, Discord con video, etc.).</li>
+        <li>En Windows, activa el <strong>Modo de rendimiento</strong> en la configuración de energía.</li>
+        <li>Si juegas en móvil, activa el modo bajo consumo y reinicia el dispositivo.</li>
+      </ol>
+    </div>
+    <div class="solution-preview">✅ Reducir gráficos al mínimo mejora el FPS en un 60–80% en equipos con hardware limitado.</div>
+  </div>
+</div>
+
+<!-- Modal Studio -->
+<div class="modal-overlay" id="modal-studio">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>⚠ Roblox Studio — Plugins no cargan</h2>
+      <button class="modal-close" onclick="closeModal('studio')">✕</button>
+    </div>
+    <div class="modal-section">
+      <h4>¿Qué causa este error?</h4>
+      <p>Generalmente ocurre tras una actualización de Studio que cambió la API de plugins, o por permisos de cuenta incorrectos. También puede deberse a plugins obsoletos no compatibles con la versión actual.</p>
+    </div>
+    <div class="modal-section">
+      <h4>Solución</h4>
+      <ol class="step-list">
+        <li>Ve a <strong>File → Settings → Studio</strong> y activa "Allow HTTP Requests".</li>
+        <li>Desactiva y vuelve a activar cada plugin individualmente desde la pestaña Plugins.</li>
+        <li>Borra la caché: <strong>%LocalAppData%\Roblox\logs</strong> y reinicia Studio.</li>
+        <li>Desinstala el plugin problemático desde <strong>roblox.com → Mis creaciones → Plugins</strong>.</li>
+        <li>Reinstala Studio completamente si el problema persiste.</li>
+      </ol>
+    </div>
+    <div class="solution-preview">✅ El 78% de casos se resuelve desactivando y reactivando el plugin.</div>
+  </div>
+</div>
+
+<!-- Modal Audio -->
+<div class="modal-overlay" id="modal-audio">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>⚠ Sin sonido en Roblox</h2>
+      <button class="modal-close" onclick="closeModal('audio')">✕</button>
+    </div>
+    <div class="modal-section">
+      <h4>¿Por qué no hay audio?</h4>
+      <p>El mezclador de volumen de Windows puede tener Roblox silenciado, o el driver de audio entró en conflicto con la aplicación. En Mac puede ser un problema de permisos de micrófono que bloquea el audio de salida.</p>
+    </div>
+    <div class="modal-section">
+      <h4>Solución paso a paso</h4>
+      <ol class="step-list">
+        <li>Click derecho en el ícono de volumen → <strong>Abrir mezclador de volumen</strong> → sube el volumen de Roblox.</li>
+        <li>Ve a <strong>Configuración de sonido → Opciones avanzadas de sonido</strong> y verifica el dispositivo de salida de Roblox.</li>
+        <li>Reinicia el servicio de audio: <strong>Win+R → services.msc → Windows Audio → Reiniciar</strong>.</li>
+        <li>Dentro del juego verifica que el volumen no esté en 0 en Configuración.</li>
+        <li>Actualiza los drivers de audio desde el Administrador de dispositivos.</li>
+      </ol>
+    </div>
+    <div class="solution-preview">✅ El mezclador de volumen silenciado es la causa en el 65% de los casos.</div>
+  </div>
+</div>
+
+<script>
+  function openModal(id) {
+    document.getElementById('modal-' + id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal(id) {
+    document.getElementById('modal-' + id).classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  // Close on overlay click
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', function(e) {
+      if (e.target === this) {
+        this.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    });
+  });
+  // Sort buttons
+  document.querySelectorAll('.sort-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>
